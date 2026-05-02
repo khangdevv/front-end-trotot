@@ -1,76 +1,81 @@
 import { useState } from "react";
 import { MapPin, Settings2, Target, Search } from "lucide-react";
+import "./SearchBar.css";
 
 const SearchBar = ({ searchTerm, setSearchTerm, onLocationClick, onSearch, isLocating, filters, setFilters, searchRadius, setSearchRadius }) => {
   const [showFilters, setShowFilters] = useState(false);
 
   return (
-  <section className="container mx-auto px-4 -mt-16 md:-mt-20 relative z-20 mb-16">
-    <div className="max-w-4xl mx-auto flex flex-col gap-3 bg-white p-3 rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-gray-100 transition-all duration-300">
-      <div className="flex flex-col md:flex-row gap-3">
-        <div className="flex grow items-center gap-3 bg-gray-50/50 px-5 py-3 rounded-full focus-within:bg-white focus-within:ring-2 focus-within:ring-rose-500/50 transition-all duration-300">
-          <MapPin className="text-gray-400" size={20} />
-          <input 
-            type="text" 
-            placeholder="Bạn muốn tìm phòng ở đâu?" 
-            className="w-full bg-transparent outline-none text-gray-900 font-semibold placeholder-gray-400 text-base"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && onSearch()}
-          />
-        </div>
-        <div className="flex gap-2 shrink-0">
+    <section className="container mx-auto px-4 -mt-16 md:-mt-20 relative z-20 mb-12">
+      <div className="max-w-5xl mx-auto flex flex-col gap-2 bg-white p-2 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.15)] border border-gray-100 transition-all duration-300">
+        <div className="flex flex-col lg:flex-row gap-2 items-stretch lg:items-center">
+          {/* Search Input */}
+          <div className="flex grow items-center gap-2 bg-gray-50/50 px-4 py-2 rounded-full focus-within:bg-white focus-within:ring-2 focus-within:ring-rose-500/50 transition-all duration-300">
+            <MapPin className="text-gray-400 flex-shrink-0" size={18} />
+            <input 
+              type="text" 
+              placeholder="Bạn muốn tìm phòng ở đâu?" 
+              className="w-full bg-transparent outline-none text-gray-900 font-semibold placeholder-gray-400 text-sm"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && onSearch()}
+            />
+          </div>
+
+          {/* Filter Button */}
           <button 
             type="button"
             onClick={() => setShowFilters(!showFilters)} 
-            className="flex items-center justify-center gap-2 rounded-2xl md:rounded-full bg-gray-50 px-6 py-4 text-gray-600 hover:bg-gray-100 hover:text-gray-900 font-bold transition-colors border border-gray-100"
+            className="flex items-center justify-center gap-2 rounded-full bg-gray-50 hover:bg-gray-100 px-4 py-2 text-gray-600 hover:text-gray-900 font-bold text-sm transition-colors border border-gray-100 flex-shrink-0"
           >
-            <Settings2 size={18} />
-            <span className="hidden md:inline">Bộ lọc</span>
+            <Settings2 size={16} />
+            <span>Bộ lọc</span>
           </button>
           
-          <div className={`flex-1 md:flex-none flex items-center justify-center gap-2 rounded-2xl md:rounded-full border border-gray-200 bg-white px-4 py-2 text-gray-700 shadow-sm transition-all hover:border-gray-300 ${isLocating ? 'opacity-50' : ''}`}>
+          {/* Location/Radius Section */}
+          <div className={`flex items-center justify-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-2 text-gray-700 transition-all hover:border-gray-300 flex-shrink-0 ${isLocating ? 'opacity-60' : ''}`}>
             <button 
               type="button" 
               onClick={() => onLocationClick(searchRadius)}
               disabled={isLocating}
-              className="p-1.5 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-colors flex items-center justify-center text-gray-400"
+              className="p-1 hover:bg-rose-50 hover:text-rose-600 rounded-full transition-colors flex items-center justify-center text-gray-400 flex-shrink-0"
               title="Tìm quanh đây"
             >
-              <Target size={20} className={isLocating ? "animate-pulse text-rose-500" : ""} />
+              <Target size={16} className={isLocating ? "animate-pulse text-rose-500" : ""} />
             </button>
-            <div className="flex flex-col justify-center w-28 pr-2">
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">{isLocating ? "Đang quét" : "Gần tôi"}</span>
-                <span className="text-[10px] font-bold text-rose-600">{searchRadius} km</span>
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-bold text-gray-600 whitespace-nowrap">{isLocating ? "Đang quét" : "GẦN TÔI"}</span>
+              <div className="flex items-center gap-2 border-l border-gray-200 pl-2">
+                <input 
+                  type="range" 
+                  min="1" 
+                  max="5" 
+                  step="1"
+                  value={searchRadius}
+                  onChange={(e) => setSearchRadius(Number(e.target.value))}
+                  onMouseUp={() => onLocationClick(searchRadius)}
+                  onTouchEnd={() => onLocationClick(searchRadius)}
+                  disabled={isLocating}
+                  className="search-range w-32 h-1.5 bg-gray-200 rounded-full appearance-none cursor-pointer accent-rose-500 focus:outline-none"
+                />
+                <span className="text-xs font-bold text-rose-600 whitespace-nowrap w-8 text-right">{searchRadius}km</span>
               </div>
-              <input 
-                type="range" 
-                min="1" 
-                max="5" 
-                step="1"
-                value={searchRadius}
-                onChange={(e) => setSearchRadius(Number(e.target.value))}
-                onMouseUp={() => onLocationClick(searchRadius)}
-                onTouchEnd={() => onLocationClick(searchRadius)}
-                disabled={isLocating}
-                className="w-full h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-rose-500 focus:outline-none focus:ring-2 focus:ring-rose-500/30"
-              />
             </div>
           </div>
+
+          {/* Search Button */}
           <button 
             type="button"
             onClick={onSearch}
-            className="hidden md:flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-rose-500 to-orange-500 px-8 py-4 text-sm font-black text-white hover:shadow-lg hover:shadow-rose-500/40 hover:scale-105 transition-all duration-300"
+            className="flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-rose-500 to-orange-500 px-6 py-2 text-xs font-black text-white hover:shadow-lg hover:shadow-rose-500/40 hover:scale-105 transition-all duration-300 flex-shrink-0 whitespace-nowrap"
           >
-            <Search size={18} strokeWidth={2.5} /> 
+            <Search size={16} strokeWidth={2.5} /> 
             TÌM KIẾM
           </button>
         </div>
-      </div>
 
-      {showFilters && (
-        <div className="flex flex-col gap-4 px-2 py-3 border-t border-gray-100 mt-2 fade-in">
+        {showFilters && (
+          <div className="flex flex-col gap-4 px-2 py-3 border-t border-gray-100 mt-2 fade-in">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 flex flex-col gap-1">
               <label className="text-xs font-bold text-gray-500 uppercase">Loại phòng</label>
@@ -137,10 +142,10 @@ const SearchBar = ({ searchTerm, setSearchTerm, onLocationClick, onSearch, isLoc
           <button type="button" onClick={onSearch} className="md:hidden mt-2 flex items-center justify-center rounded-xl bg-gradient-to-r from-rose-500 to-orange-500 px-6 py-3 text-sm font-black text-white hover:shadow-lg transition-all">
             ÁP DỤNG LỌC
           </button>
-        </div>
-      )}
-    </div>
-  </section>
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 

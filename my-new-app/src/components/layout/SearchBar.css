@@ -1,0 +1,26 @@
+/* Slider thumb styling */
+.search-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f43f5e, #fb7185);
+  border: 2px solid white;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.4);
+}
+
+.search-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f43f5e, #fb7185);
+  border: 2px solid white;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.4);
+}
+
+.search-range::-moz-range-track {
+  background: transparent;
+  border: none;
+}
